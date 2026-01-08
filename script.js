@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const questionBox = document.getElementById('questionBox');
+  const card = document.querySelector('.card'); // Get card reference
   const msgEl = document.getElementById('message');
   const correctEl = document.getElementById('correctCount');
   const wrongEl = document.getElementById('wrongCount');
@@ -152,6 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
       osc.stop(now + 0.4);
     }
   }
+
+
 
   // Elements created dynamically
   let aEl, bEl, opEl, eqEl, answerEl, submitBtn;
