@@ -1,115 +1,586 @@
 <!doctype html>
 <html lang="vi">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Bé luyện bảng cửu chương</title>
   <style>
-    :root{
-      --bg:#f7fbff;
-      --card:#ffffff;
-      --accent:#4f46e5;
-      --success:#16a34a;
-      --danger:#ef4444;
-      --muted:#6b7280;
+    :root {
+      --bg: #f7fbff;
+      --card: #ffffff;
+      --accent: #4f46e5;
+      --success: #16a34a;
+      --danger: #ef4444;
+      --muted: #6b7280;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family:system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      background:linear-gradient(180deg,var(--bg),#eaf2ff);
-      display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px;
+
+    * {
+      box-sizing: border-box
     }
-    .card{
-      width:100%; max-width:720px; background:var(--card); border-radius:20px; box-shadow:0 8px 30px rgba(15,23,42,0.08);
-      padding:32px; text-align:center; position:relative;
+
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, var(--bg), #eaf2ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
     }
-    h1{margin:0 0 12px; font-size:28px; line-height:1.3}
-    p.lead{margin:0 0 22px; color:var(--muted); font-size:16px; line-height:1.5}
-    .question{
-      font-size:56px; font-weight:700; margin:20px 0; display:flex; align-items:center; justify-content:center; gap:14px;
+
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+      padding: 32px;
+      text-align: center;
+      position: relative;
     }
-    .box{
-      background:#f3f4f6; padding:20px 24px; border-radius:14px; display:inline-flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:center;
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.3
     }
-    .operator{font-size:28px; opacity:0.8}
-    input[type=number]{
-      font-size:32px; padding:14px 16px; border-radius:12px; border:2px solid transparent; width:180px; text-align:center;
-      outline:none; background:white; box-shadow:0 2px 6px rgba(2,6,23,0.06);
+
+    p.lead {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5
     }
-    input[type=number]:focus{border-color:rgba(79,70,229,0.25)}
-    .submit-btn{
-      font-size:24px; padding:14px 20px; border-radius:12px; border:none; background:var(--accent); color:white;
-      font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(79,70,229,0.3); transition:all 0.2s;
-      min-width:100px;
+
+    .question {
+      font-size: 56px;
+      font-weight: 700;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
     }
-    .submit-btn:hover{background:#4338ca; transform:translateY(-2px); box-shadow:0 6px 16px rgba(79,70,229,0.4)}
-    .submit-btn:active{transform:translateY(0); box-shadow:0 2px 8px rgba(79,70,229,0.3)}
-    .status{min-height:60px; margin-top:20px}
-    .status .ok{color:var(--success); font-weight:800; font-size:34px; display:inline-block; animation:pop 800ms ease forwards, glow 1.2s ease-in-out infinite alternate}
-    .status .err{color:var(--danger); font-weight:700; font-size:28px; display:inline-block; animation:shake 480ms ease}
-    .status .correct-answer{display:block; margin-top:8px; font-size:20px; color:var(--muted)}
-    .stats{margin-top:24px; display:flex; justify-content:center; gap:32px; font-size:20px; font-weight:600}
-    .stats span{padding:10px 18px; border-radius:12px; box-shadow:0 4px 12px rgba(2,6,23,0.08)}
-    .stats .correct{background:#ecfdf5; color:var(--success)}
-    .stats .wrong{background:#fef2f2; color:var(--danger)}
-    .history{margin-top:28px; text-align:left; max-height:260px; overflow-y:auto; border-top:1px solid #e5e7eb; padding-top:16px}
-    .history h2{font-size:18px; margin:0 0 10px; color:var(--muted)}
-    .history ul{list-style:none; margin:0; padding:0; font-size:18px}
-    .history li{margin:6px 0; padding:6px 10px; border-radius:8px}
-    .history li.correct{background:#ecfdf5; color:var(--success); font-weight:600}
-    .history li.wrong{background:#fef2f2; color:var(--danger); font-weight:600}
-    .small{font-size:14px; color:var(--muted)}
-    .settings{display:flex; gap:10px; justify-content:center; margin-top:20px; align-items:center; flex-wrap:wrap}
-    select{padding:8px 10px; border-radius:8px; border:1px solid #e6e9ef}
-    .number-buttons{display:flex; gap:8px; margin-top:16px; justify-content:center; flex-wrap:wrap}
-    .num-btn{padding:12px 18px; border-radius:10px; border:2px solid #e5e7eb; background:white; font-size:18px; font-weight:600; cursor:pointer; transition:all 0.2s}
-    .num-btn:hover{background:#f3f4f6; transform:translateY(-2px)}
-    .num-btn.active{background:var(--accent); color:white; border-color:var(--accent)}
-    @media (max-width:520px){
-      body{padding:12px}
-      .card{padding:20px; border-radius:16px}
-      h1{font-size:22px; margin-bottom:8px}
-      p.lead{font-size:14px; margin-bottom:16px}
-      .question{font-size:32px; margin:16px 0; gap:8px; flex-wrap:wrap}
-      .box{padding:14px 16px; gap:8px; flex-wrap:wrap; justify-content:center}
-      .operator{font-size:20px}
-      input[type=number]{width:110px; font-size:22px; padding:10px 12px}
-      .submit-btn{font-size:20px; padding:10px 16px; min-width:80px}
-      .status{min-height:50px; margin-top:16px}
-      .status .ok{font-size:24px}
-      .status .err{font-size:20px}
-      .status .correct-answer{font-size:16px; margin-top:6px}
-      .stats{margin-top:20px; gap:16px; font-size:16px}
-      .stats span{padding:8px 14px}
-      .settings{margin-top:16px; gap:8px}
-      .number-buttons{gap:6px; margin-top:12px}
-      .num-btn{padding:10px 14px; font-size:16px}
-      .history{margin-top:20px; max-height:200px; padding-top:12px}
-      .history h2{font-size:16px; margin-bottom:8px}
-      .history ul{font-size:15px}
-      .history li{margin:4px 0; padding:5px 8px; font-size:14px}
-      .small{font-size:12px}
+
+    .box {
+      background: #f3f4f6;
+      padding: 20px 24px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    @media (max-width:380px){
-      body{padding:8px}
-      .card{padding:16px}
-      h1{font-size:20px}
-      p.lead{font-size:13px}
-      .question{font-size:28px}
-      input[type=number]{width:100px; font-size:20px}
-      .submit-btn{font-size:18px; padding:8px 14px; min-width:70px}
-      .num-btn{padding:8px 12px; font-size:15px}
+
+    .operator {
+      font-size: 28px;
+      opacity: 0.8
     }
-    @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
-    @keyframes pop{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.3);opacity:1}100%{transform:scale(1)}}
-    @keyframes glow{from{text-shadow:0 0 8px rgba(22,163,74,0.5),0 0 20px rgba(22,163,74,0.3)} to{text-shadow:0 0 16px rgba(22,163,74,0.9),0 0 30px rgba(22,163,74,0.5)}}
-    .confetti{position:absolute; width:8px; height:8px; background:var(--accent); top:0; left:0; opacity:0.9; border-radius:2px; animation:fall 3s linear forwards}
-    @keyframes fall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(600px) rotate(360deg);opacity:0}}
+
+    input[type=number] {
+      font-size: 32px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      width: 180px;
+      text-align: center;
+      outline: none;
+      background: white;
+      box-shadow: 0 2px 6px rgba(2, 6, 23, 0.06);
+    }
+
+    input[type=number]:focus {
+      border-color: rgba(79, 70, 229, 0.25)
+    }
+
+    .submit-btn {
+      font-size: 24px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      transition: all 0.2s;
+      min-width: 100px;
+    }
+
+    .submit-btn:hover {
+      background: #4338ca;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4)
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3)
+    }
+
+    .status {
+      min-height: 60px;
+      margin-top: 20px
+    }
+
+    .status .ok {
+      color: var(--success);
+      font-weight: 800;
+      font-size: 34px;
+      display: inline-block;
+      animation: pop 800ms ease forwards, glow 1.2s ease-in-out infinite alternate
+    }
+
+    .status .err {
+      color: var(--danger);
+      font-weight: 700;
+      font-size: 28px;
+      display: inline-block;
+      animation: shake 480ms ease
+    }
+
+    .status .correct-answer {
+      display: block;
+      margin-top: 8px;
+      font-size: 20px;
+      color: var(--muted)
+    }
+
+    .stats {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      font-size: 20px;
+      font-weight: 600
+    }
+
+    .stats span {
+      padding: 10px 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(2, 6, 23, 0.08)
+    }
+
+    .stats .correct {
+      background: #ecfdf5;
+      color: var(--success)
+    }
+
+    .stats .wrong {
+      background: #fef2f2;
+      color: var(--danger)
+    }
+
+    .history {
+      margin-top: 28px;
+      text-align: left;
+      max-height: 260px;
+      overflow-y: auto;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 16px
+    }
+
+    .history h2 {
+      font-size: 18px;
+      margin: 0 0 10px;
+      color: var(--muted)
+    }
+
+    .history ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 18px
+    }
+
+    .history li {
+      margin: 6px 0;
+      padding: 6px 10px;
+      border-radius: 8px
+    }
+
+    .history li.correct {
+      background: #ecfdf5;
+      color: var(--success);
+      font-weight: 600
+    }
+
+    .history li.wrong {
+      background: #fef2f2;
+      color: var(--danger);
+      font-weight: 600
+    }
+
+    .small {
+      font-size: 14px;
+      color: var(--muted)
+    }
+
+    .settings {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    select {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #e6e9ef
+    }
+
+    .number-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      justify-content: center;
+      flex-wrap: wrap
+    }
+
+    .num-btn {
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s
+    }
+
+    .num-btn:hover {
+      background: #f3f4f6;
+      transform: translateY(-2px)
+    }
+
+    .num-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent)
+    }
+
+    @media (max-width:520px) {
+      body {
+        padding: 12px
+      }
+
+      .card {
+        padding: 20px;
+        border-radius: 16px
+      }
+
+      h1 {
+        font-size: 22px;
+        margin-bottom: 8px
+      }
+
+      p.lead {
+        font-size: 14px;
+        margin-bottom: 16px
+      }
+
+      .question {
+        font-size: 32px;
+        margin: 16px 0;
+        gap: 8px;
+        flex-wrap: wrap
+      }
+
+      .box {
+        padding: 14px 16px;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center
+      }
+
+      .operator {
+        font-size: 20px
+      }
+
+      input[type=number] {
+        width: 110px;
+        font-size: 22px;
+        padding: 10px 12px
+      }
+
+      .submit-btn {
+        font-size: 20px;
+        padding: 10px 16px;
+        min-width: 80px
+      }
+
+      .status {
+        min-height: 50px;
+        margin-top: 16px
+      }
+
+      .status .ok {
+        font-size: 24px
+      }
+
+      .status .err {
+        font-size: 20px
+      }
+
+      .status .correct-answer {
+        font-size: 16px;
+        margin-top: 6px
+      }
+
+      .stats {
+        margin-top: 20px;
+        gap: 16px;
+        font-size: 16px
+      }
+
+      .stats span {
+        padding: 8px 14px
+      }
+
+      .settings {
+        margin-top: 16px;
+        gap: 8px
+      }
+
+      .number-buttons {
+        gap: 6px;
+        margin-top: 12px
+      }
+
+      .num-btn {
+        padding: 10px 14px;
+        font-size: 16px
+      }
+
+      .history {
+        margin-top: 20px;
+        max-height: 200px;
+        padding-top: 12px
+      }
+
+      .history h2 {
+        font-size: 16px;
+        margin-bottom: 8px
+      }
+
+      .history ul {
+        font-size: 15px
+      }
+
+      .history li {
+        margin: 4px 0;
+        padding: 5px 8px;
+        font-size: 14px
+      }
+
+      .small {
+        font-size: 12px
+      }
+    }
+
+    @media (max-width:380px) {
+      body {
+        padding: 8px
+      }
+
+      .card {
+        padding: 16px
+      }
+
+      h1 {
+        font-size: 20px
+      }
+
+      p.lead {
+        font-size: 13px
+      }
+
+      .question {
+        font-size: 28px
+      }
+
+      input[type=number] {
+        width: 100px;
+        font-size: 20px
+      }
+
+      .submit-btn {
+        font-size: 18px;
+        padding: 8px 14px;
+        min-width: 70px
+      }
+
+      .num-btn {
+        padding: 8px 12px;
+        font-size: 15px
+      }
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0)
+      }
+
+      25% {
+        transform: translateX(-6px)
+      }
+
+      50% {
+        transform: translateX(6px)
+      }
+
+      75% {
+        transform: translateX(-4px)
+      }
+
+      100% {
+        transform: translateX(0)
+      }
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.5);
+        opacity: 0
+      }
+
+      60% {
+        transform: scale(1.3);
+        opacity: 1
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 8px rgba(22, 163, 74, 0.5), 0 0 20px rgba(22, 163, 74, 0.3)
+      }
+
+      to {
+        text-shadow: 0 0 16px rgba(22, 163, 74, 0.9), 0 0 30px rgba(22, 163, 74, 0.5)
+      }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      top: 0;
+      left: 0;
+      opacity: 0.9;
+      border-radius: 2px;
+      animation: fall 3s linear forwards
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0)
+      }
+
+      100% {
+        transform: translateY(600px) rotate(360deg);
+        opacity: 0
+      }
+    }
+
+    .nav-menu {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 10px
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 8px 16px;
+      transition: all 0.2s
+    }
+
+    .nav-btn:hover {
+      color: var(--accent);
+      background: #f9fafb;
+      border-radius: 8px 8px 0 0
+    }
+
+    .nav-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent)
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .timer-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: #f3f4f6;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 100%;
+    }
+
+    .timer-text {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+      opacity: 0.8
+    }
+
+    .settings-label {
+      margin-right: 8px;
+      display: inline-block
+    }
+
+    .settings-input {
+      width: 60px !important;
+      font-size: 18px !important;
+      padding: 6px !important
+    }
+
+    .box {
+      position: relative;
+      overflow: hidden;
+      padding-top: 34px !important;
+      min-width: 320px
+    }
   </style>
 </head>
+
 <body>
   <div class="card" role="main">
-    <h1>Bé luyện bảng cửu chương</h1>
+    <div class="nav-menu">
+      <button class="nav-btn active" data-mode="multiplication">Bảng Cửu Chương</button>
+      <button class="nav-btn" data-mode="addsub">Luyện Cộng Trừ</button>
+      <button class="nav-btn" data-mode="findx">Tìm Số Còn Thiếu</button>
+    </div>
+    <h1 id="pageTitle">Bé luyện bảng cửu chương</h1>
     <p class="lead">Nhấn vào nút số (2-9) để luyện tập chỉ với số đó. Nhấn lại để tắt chế độ luyện tập.</p>
 
     <div class="number-buttons">
@@ -131,13 +602,8 @@
     <div class="status" aria-live="assertive"><span id="message"></span></div>
 
     <div class="question" aria-live="polite">
-      <div class="box">
-        <span id="a">6</span>
-        <span class="operator">×</span>
-        <span id="b">7</span>
-        <span class="operator">=</span>
-        <input id="answer" type="number" inputmode="numeric" autocomplete="off" aria-label="Nhập đáp án">
-        <button id="submitBtn" class="submit-btn">OK</button>
+      <div class="box" id="questionBox">
+        <!-- Content generated by JS -->
       </div>
     </div>
 
@@ -146,108 +612,425 @@
       <ul id="historyList"></ul>
     </div>
 
-    <p class="small" style="margin-top:18px">Bé nhập kết quả và nhấn Enter hoặc nút OK. Nếu đúng, hiện "Chính xác!", rồi nhấn Enter/OK lần nữa để sang câu mới.</p>
+    <div class="settings">
+      <label class="settings-label" for="timeSetting">Thời gian suy nghĩ (giây):</label>
+      <input id="timeSetting" class="settings-input" type="number" min="5" max="300" value="30">
+    </div>
+
+    <p class="small" style="margin-top:10px">Bé nhập kết quả và nhấn Enter hoặc nút OK. Nếu đúng, hiện "Chính xác!", rồi
+      nhấn Enter/OK lần nữa để sang câu mới.</p>
   </div>
 
   <script>
-    (function(){
-      const aEl = document.getElementById('a');
-      const bEl = document.getElementById('b');
-      const answerEl = document.getElementById('answer');
+    (function () {
+      const questionBox = document.getElementById('questionBox');
       const msgEl = document.getElementById('message');
       const correctEl = document.getElementById('correctCount');
       const wrongEl = document.getElementById('wrongCount');
       const historyList = document.getElementById('historyList');
-      const submitBtn = document.getElementById('submitBtn');
+      const numberButtonsContainer = document.querySelector('.number-buttons');
+      const pageTitle = document.getElementById('pageTitle');
+      const navButtons = document.querySelectorAll('.nav-btn');
+      // Sound Effects System
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioContext();
 
-      let current = {a:6,b:7};
+      function playSound(type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const gain = audioCtx.createGain();
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        const osc = audioCtx.createOscillator();
+        osc.connect(gain);
+
+        if (type === 'correct') {
+          // Ding! (High sine wave)
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now); // D5
+          osc.frequency.exponentialRampToValueAtTime(1174.66, now + 0.1); // D6
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+          osc.start(now);
+          osc.stop(now + 0.5);
+        } else if (type === 'timeout') {
+          // Time's up! (Descending sine slide)
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now); // A4
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.6); // A2
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.6);
+          osc.start(now);
+          osc.stop(now + 0.6);
+        } else {
+          // Buzz (Low sawtooth) - Original Sound
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        }
+      }
+
+      // Elements created dynamically
+      let aEl, bEl, opEl, eqEl, answerEl, submitBtn;
+
+      let currentMode = 'multiplication';
+      let current = { a: 6, b: 7, op: '×', result: 42, missingPos: 2 }; // missingPos: 0 (a), 1 (b), 2 (result)
       let awaitingNext = false;
       let correctCount = 0;
       let wrongCount = 0;
       let focusedNumber = null;
 
-      function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min }
+      // Timer System
+      let timerDuration = 30;
+      let timeLeft = 30;
+      let timerRaf = null;
+      let timerBar = null;
+      let timerText = null;
 
-      function newQuestion(){
-        const range = {min: 1, max: 9};
-
-        if(focusedNumber !== null){
-          // One operand is the focused number, the other is random
-          if(Math.random() < 0.5){
-            current.a = focusedNumber;
-            current.b = randInt(range.min, range.max);
-          } else {
-            current.a = randInt(range.min, range.max);
-            current.b = focusedNumber;
-          }
-        } else {
-          // Normal mode: both operands are random
-          current.a = randInt(range.min, range.max);
-          current.b = randInt(range.min, range.max);
+      function initTimer() {
+        const saved = localStorage.getItem('bcc_timer');
+        if (saved) {
+          timerDuration = parseInt(saved);
         }
-
-        aEl.textContent = current.a;
-        bEl.textContent = current.b;
-        msgEl.textContent = '';
-        answerEl.value = '';
-        answerEl.classList.remove('shake');
-        answerEl.focus();
-        awaitingNext = false;
-        submitBtn.textContent = 'OK';
       }
 
-      function throwConfetti(){
-        for(let i=0;i<20;i++){
+      function updateTimerDisplay(remainingSec) {
+        if (!timerText || !timerBar) return;
+        // Text: Ceiling to show "30s" until it hits 29.xxx
+        timerText.textContent = Math.ceil(remainingSec) + 's';
+
+        // Bar: Use exact value for smooth animation
+        // Clamp between 0 and 100
+        const pct = Math.max(0, Math.min(100, (remainingSec / timerDuration) * 100));
+        timerBar.style.width = pct + '%';
+
+        if (remainingSec <= 5) timerBar.style.background = 'var(--danger)';
+        else timerBar.style.background = 'var(--accent)';
+      }
+
+      function startTimer() {
+        if (timerRaf) cancelAnimationFrame(timerRaf);
+
+        const startTime = Date.now();
+        const endTime = startTime + timerDuration * 1000;
+
+        function tick() {
+          const now = Date.now();
+          const remainingMs = endTime - now;
+
+          if (remainingMs <= 0) {
+            updateTimerDisplay(0);
+            handleTimeout();
+            return;
+          }
+
+          updateTimerDisplay(remainingMs / 1000);
+          timerRaf = requestAnimationFrame(tick);
+        }
+
+        tick();
+      }
+
+      function stopTimer() {
+        if (timerRaf) cancelAnimationFrame(timerRaf);
+      }
+
+      function handleTimeout() {
+        stopTimer();
+        playSound('timeout'); // distinct sound
+        msgEl.innerHTML = '<span class="err">Hết giờ! ⏰</span>';
+
+        let correctValue;
+        if (current.missingPos === 0) correctValue = current.a;
+        else if (current.missingPos === 1) correctValue = current.b;
+        else correctValue = current.result;
+
+        msgEl.innerHTML += `<span class="correct-answer">Đáp án đúng: ${correctValue}</span>`;
+
+        // Log as wrong
+        wrongCount++;
+        wrongEl.textContent = wrongCount;
+        addHistory(`${current.a} ${current.op} ${current.b}`, '?', false, correctValue);
+
+        awaitingNext = true;
+        if (submitBtn) submitBtn.textContent = 'Câu Khác';
+        if (answerEl) answerEl.blur();
+      }
+
+      initTimer();
+
+      function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min }
+
+      function renderEquation() {
+        questionBox.innerHTML = '';
+
+        // Create Timer UI inside Box
+        const tContainer = document.createElement('div');
+        tContainer.className = 'timer-container';
+
+        timerBar = document.createElement('div');
+        timerBar.className = 'timer-bar';
+        // Set initial width
+        timerBar.style.width = (timeLeft / timerDuration) * 100 + '%';
+        timerBar.style.background = timeLeft <= 5 ? 'var(--danger)' : 'var(--accent)';
+
+        timerText = document.createElement('div');
+        timerText.className = 'timer-text';
+        timerText.textContent = timeLeft + 's';
+
+        tContainer.appendChild(timerBar);
+        questionBox.appendChild(tContainer);
+        questionBox.appendChild(timerText);
+
+        // Helper to create text span
+        const createSpan = (text, className) => {
+          const s = document.createElement('span');
+          s.textContent = text;
+          if (className) s.className = className;
+          return s;
+        };
+
+        // Create Input and Button (reused references)
+        answerEl = document.createElement('input');
+        answerEl.id = 'answer';
+        answerEl.type = 'number';
+        answerEl.inputMode = 'numeric';
+        answerEl.autocomplete = 'off';
+        answerEl.ariaLabel = 'Nhập đáp án';
+
+        // Re-attach event listeners to new elements
+        answerEl.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault(); checkAnswer();
+          }
+        });
+
+        submitBtn = document.createElement('button');
+        submitBtn.id = 'submitBtn';
+        submitBtn.className = 'submit-btn';
+        submitBtn.textContent = awaitingNext ? 'Câu Khác' : 'Kiểm Tra';
+        submitBtn.addEventListener('click', function () { checkAnswer(); });
+
+
+
+        // Build DOM based on missingPos
+        // Scheme: [Part1] [Op] [Part2] [=] [Part3]
+        // But logic is simpler: we always have a, op, b, =, result.
+        // One of a, b, result is the input.
+
+        const parts = [];
+
+        // Part A
+        if (current.missingPos === 0) parts.push(answerEl);
+        else parts.push(createSpan(current.a));
+
+        // Operator
+        parts.push(createSpan(current.op, 'operator'));
+
+        // Part B
+        if (current.missingPos === 1) parts.push(answerEl);
+        else parts.push(createSpan(current.b));
+
+        // Equals
+        parts.push(createSpan('=', 'operator'));
+
+        // Result
+        if (current.missingPos === 2) parts.push(answerEl);
+        else parts.push(createSpan(current.result));
+
+        // Add Button at the end
+        parts.push(submitBtn);
+
+        // Append to Box
+        parts.forEach(p => questionBox.appendChild(p));
+
+        answerEl.focus();
+      }
+
+      function newQuestion() {
+        awaitingNext = false;
+        timeLeft = timerDuration; // Reset here
+        current.missingPos = 2; // Default to finding result
+
+        if (currentMode === 'multiplication') {
+          current.op = '×';
+          const range = { min: 1, max: 9 };
+          let a, b;
+
+          if (focusedNumber !== null) {
+            if (Math.random() < 0.5) {
+              a = focusedNumber;
+              b = randInt(range.min, range.max);
+            } else {
+              a = randInt(range.min, range.max);
+              b = focusedNumber;
+            }
+          } else {
+            a = randInt(range.min, range.max);
+            b = randInt(range.min, range.max);
+          }
+          current.a = a;
+          current.b = b;
+          current.result = a * b;
+
+        } else if (currentMode === 'addsub' || currentMode === 'findx') {
+          // Add/Sub or FindX logic
+          current.op = Math.random() < 0.5 ? '+' : '-';
+          let a, b, res;
+
+          if (current.op === '+') {
+            // Guarantee: a + b <= 19, and no zeros (min 1)
+            // min sum = 1+1 = 2. max sum = 19.
+            // a can be 1 to 18.
+            a = randInt(1, 18);
+            b = randInt(1, 19 - a);
+            res = a + b;
+          } else {
+            // Guarantee: a - b >= 1 (no zero result)
+            // a must be at least 2 to have a valid b >= 1
+            a = randInt(2, 19);
+            b = randInt(1, a - 1);
+            res = a - b;
+          }
+          current.a = a;
+          current.b = b;
+          current.result = res;
+
+          if (currentMode === 'findx') {
+            // Weighted Random for Missing Position
+            // Bias towards finding operands (0 or 1) rather than result (2)
+            // Specifically favor a - x = b (Pos 1) for subtraction
+
+            const r = Math.random();
+            if (current.op === '-') {
+              // Subtraction: High chance for x (Pos 1: a - [?] = b)
+              // 0.0 - 0.5: Pos 1 (50%) -> a - [?] = b
+              // 0.5 - 0.8: Pos 0 (30%) -> [?] - b = c
+              // 0.8 - 1.0: Pos 2 (20%) -> a - b = [?]
+              if (r < 0.5) current.missingPos = 1;
+              else if (r < 0.8) current.missingPos = 0;
+              else current.missingPos = 2;
+            } else {
+              // Addition: Equal chance for a or b, low for result
+              // 0.0 - 0.4: Pos 0 (40%) -> [?] + b = c
+              // 0.4 - 0.8: Pos 1 (40%) -> a + [?] = c
+              // 0.8 - 1.0: Pos 2 (20%) -> a + b = [?]
+              if (r < 0.4) current.missingPos = 0;
+              else if (r < 0.8) current.missingPos = 1;
+              else current.missingPos = 2;
+            }
+          }
+        }
+
+        renderEquation();
+
+        msgEl.textContent = '';
+        startTimer();
+      }
+
+      function throwConfetti() {
+        for (let i = 0; i < 20; i++) {
           const conf = document.createElement('div');
           conf.className = 'confetti';
-          conf.style.left = Math.random()*100+'%';
-          conf.style.background = `hsl(${Math.random()*360},80%,60%)`;
-          conf.style.animationDuration = (2+Math.random()*2)+'s';
+          conf.style.left = Math.random() * 100 + '%';
+          conf.style.background = `hsl(${Math.random() * 360},80%,60%)`;
+          conf.style.animationDuration = (2 + Math.random() * 2) + 's';
           document.body.appendChild(conf);
-          setTimeout(()=>conf.remove(),3000);
+          setTimeout(() => conf.remove(), 3000);
         }
       }
 
-      function addHistory(expr,result,correct,correctAnswer){
+      // Actually, wait. I can't redefine the function signature easily without matching calls.
+      // I'll stick to the existing signature: addHistory(expr, result, correct, correctAnswer)
+      // modifying the body to adapt.
+
+      function addHistory(expr, result, correct, correctAnswer) {
         const li = document.createElement('li');
-        if(correct){
+        if (correct) {
+          // expr is like "5 + ? = 12" -> No, I should pass "5 + 7"
+          // In the new checkAnswer calls:
+          // Correct: addHistory(`${current.a} ${current.op} ${current.b}`, current.result, true)
+          // Result: "5 + 7 = 12 ✔️"
           li.textContent = expr + ' = ' + result + ' ✔️';
           li.className = 'correct';
         } else {
-          li.textContent = expr + ' ≠ ' + result + ' ❌ (Đúng: ' + correctAnswer + ')';
+          // Wrong: addHistory(..., num, false, correctValue)
+          // Result: "5 + 7 ≠ 15 ❌ (Đúng: 12)" -- This assumes result is at the end.
+          // If missingPos was 0 (Find a):
+          // User typed 15 for "a + 7 = 12".
+          // We want to say: "15 + 7 ≠ 12 ❌ (Đúng: 5)"
+          // This is tricky with the old signature.
+
+          // Simplification: logic inside to format based on missingPos
+          let userEq = '';
+          let correctEq = '';
+
+          // We access global `current` here comfortably
+          const userVal = result; // The 2nd arg passed is the user input
+          const rightVal = correctAnswer;
+
+          if (current.missingPos === 0) {
+            userEq = `${userVal} ${current.op} ${current.b} = ${current.result}`;
+          } else if (current.missingPos === 1) {
+            userEq = `${current.a} ${current.op} ${userVal} = ${current.result}`;
+          } else {
+            userEq = `${current.a} ${current.op} ${current.b} = ${userVal}`;
+          }
+
+          li.textContent = userEq + ' ❌ (Đúng: ' + rightVal + ')';
           li.className = 'wrong';
         }
         historyList.insertBefore(li, historyList.firstChild);
       }
 
-      function checkAnswer(){
-        if(awaitingNext){
+      function checkAnswer() {
+        if (awaitingNext) {
           newQuestion();
           return;
         }
         const val = answerEl.value.trim();
-        if(val === ''){ msgEl.textContent = 'Bạn chưa nhập đáp án.'; return }
+        if (val === '') { msgEl.textContent = 'Bạn chưa nhập đáp án.'; return }
+        stopTimer();
         const num = Number(val);
-        const correct = current.a * current.b;
-        if(Number.isNaN(num)){
+
+        let correctValue;
+        if (current.missingPos === 0) correctValue = current.a;
+        else if (current.missingPos === 1) correctValue = current.b;
+        else correctValue = current.result;
+
+        if (Number.isNaN(num)) {
           msgEl.textContent = 'Vui lòng nhập số hợp lệ.';
           answerEl.value = '';
           answerEl.focus();
           return;
         }
-        if(num === correct){
+        if (num === correctValue) {
           correctCount++;
           correctEl.textContent = correctCount;
           msgEl.innerHTML = '<span class="ok">Chính xác! 🎉</span>';
+          playSound('correct');
           throwConfetti();
-          addHistory(`${current.a} × ${current.b}`, num, true, correct);
+          addHistory(`${current.a} ${current.op} ${current.b}`, current.result, true); // Log full equation
           awaitingNext = true;
-          submitBtn.textContent = 'Next';
+          submitBtn.textContent = 'Câu Khác';
         } else {
           wrongCount++;
           wrongEl.textContent = wrongCount;
-          msgEl.innerHTML = '<span class="err">Sai rồi — thử lại nhé.</span>' + `<span class="correct-answer">Đáp án đúng: ${correct}</span>`;
-          addHistory(`${current.a} × ${current.b}`, num, false, correct);
+          // Construct suggestion based on what was missing
+          let rightAnsMsg = '';
+          if (current.missingPos === 0) rightAnsMsg = `(${correctValue})`;
+          else if (current.missingPos === 1) rightAnsMsg = `(${correctValue})`;
+          else rightAnsMsg = `(${correctValue})`;
+
+          msgEl.innerHTML = '<span class="err">Sai rồi — thử lại nhé.</span>';
+          playSound('wrong');
+
+          // For history logging, pass false
+          addHistory(`${current.a} ${current.op} ${current.b}`, current.result, false, correctValue);
           answerEl.value = '';
           void answerEl.offsetWidth;
           answerEl.classList.add('shake');
@@ -255,25 +1038,47 @@
         }
       }
 
-      answerEl.addEventListener('keydown', function(e){
-        if(e.key === 'Enter'){
-          e.preventDefault(); checkAnswer();
-        }
-      });
+      // Removed individual submitBtn / answerEl listeners because they are now dynamic
+      // and attached inside renderEquation()
 
-      // Submit button handler
-      submitBtn.addEventListener('click', function(){
-        checkAnswer();
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const mode = this.dataset.mode;
+          if (mode === currentMode) return;
+
+          currentMode = mode;
+          navButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          if (currentMode === 'multiplication') {
+            pageTitle.textContent = 'Bé luyện bảng cửu chương';
+            numberButtonsContainer.classList.remove('hidden');
+            document.querySelector('.lead').classList.remove('hidden');
+          } else if (currentMode === 'addsub') {
+            pageTitle.textContent = 'Bé Luyện Phép Cộng Trừ';
+            numberButtonsContainer.classList.add('hidden');
+            document.querySelector('.lead').classList.add('hidden');
+            focusedNumber = null;
+            document.querySelectorAll('.num-btn').forEach(b => b.classList.remove('active'));
+          } else {
+            pageTitle.textContent = 'Bé Luyện Tìm Số Còn Thiếu';
+            numberButtonsContainer.classList.add('hidden');
+            document.querySelector('.lead').classList.add('hidden');
+            focusedNumber = null;
+            document.querySelectorAll('.num-btn').forEach(b => b.classList.remove('active'));
+          }
+          newQuestion();
+        });
       });
 
       // Number button handlers
       const numButtons = document.querySelectorAll('.num-btn');
       numButtons.forEach(btn => {
-        btn.addEventListener('click', function(){
+        btn.addEventListener('click', function () {
           const num = parseInt(this.dataset.num);
 
           // Toggle: if clicking the same button, deactivate
-          if(focusedNumber === num){
+          if (focusedNumber === num) {
             focusedNumber = null;
             this.classList.remove('active');
           } else {
@@ -288,8 +1093,21 @@
         });
       });
 
+      // Settings Handler
+      const timeSettingInput = document.getElementById('timeSetting');
+      timeSettingInput.value = timerDuration;
+      timeSettingInput.addEventListener('change', function () {
+        let val = parseInt(this.value);
+        if (val < 5) val = 5;
+        if (val > 300) val = 300;
+        this.value = val;
+        timerDuration = val;
+        localStorage.setItem('bcc_timer', val);
+      });
+
       newQuestion();
     })();
   </script>
 </body>
+
 </html>
