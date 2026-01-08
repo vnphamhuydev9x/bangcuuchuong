@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
       label_correct_ans: "Đáp án đúng:",
       btn_check: "Kiểm Tra",
       btn_next: "Câu Khác",
-      placeholder_ans: "Nhập đáp án"
+      placeholder_ans: "Nhập đáp án",
+      btn_start_game: "Bắt Đầu! 🚀"
     },
     en: {
       app_title: "Math Practice",
@@ -47,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
       label_correct_ans: "Correct answer:",
       btn_check: "Check",
       btn_next: "Next Question",
-      placeholder_ans: "Answer"
+      placeholder_ans: "Answer",
+      btn_start_game: "Start! 🚀"
     }
   };
 
@@ -185,8 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const pct = Math.max(0, Math.min(100, (remainingSec / timerDuration) * 100));
     timerBar.style.width = pct + '%';
 
-    if (remainingSec <= 5) timerBar.style.background = 'var(--danger)';
-    else timerBar.style.background = 'var(--accent)';
+    if (remainingSec <= 5) timerBar.style.background = 'var(--warning)';
+    else timerBar.style.background = 'var(--secondary)';
   }
 
   function startTimer() {
@@ -253,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     timerBar.className = 'timer-bar';
     // Set initial width
     timerBar.style.width = (timeLeft / timerDuration) * 100 + '%';
-    timerBar.style.background = timeLeft <= 5 ? 'var(--danger)' : 'var(--accent)';
+    timerBar.style.background = timeLeft <= 5 ? 'var(--warning)' : 'var(--secondary)';
 
     timerText = document.createElement('div');
     timerText.className = 'timer-text';
@@ -347,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
     answerEl.focus();
   }
 
-  function newQuestion() {
+  function newQuestion(autoStart = true) {
     awaitingNext = false;
     timeLeft = timerDuration; // Reset here
     current.missingPos = 2; // Default to finding result
@@ -425,7 +427,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderEquation();
 
     msgEl.textContent = '';
-    startTimer();
+    if (autoStart) startTimer();
+    else stopTimer(); // Ensure timer is stopped if autoStart is false
   }
 
   function throwConfetti() {
@@ -595,7 +598,14 @@ document.addEventListener('DOMContentLoaded', () => {
         focusedNumber = null;
         document.querySelectorAll('.num-btn').forEach(b => b.classList.remove('active'));
       }
-      newQuestion();
+
+      // Reset to Start Screen
+      stopTimer();
+      const startOverlay = document.getElementById('start-overlay');
+      if (startOverlay) startOverlay.classList.remove('hidden');
+
+      // Generate new question but don't start timer
+      newQuestion(false);
     });
   });
 
@@ -617,7 +627,10 @@ document.addEventListener('DOMContentLoaded', () => {
         this.classList.add('active');
       }
 
-      newQuestion();
+      // Only start timer if overlay is hidden (game is active)
+      const overlay = document.getElementById('start-overlay');
+      const isRunning = overlay && overlay.classList.contains('hidden');
+      newQuestion(isRunning);
     });
   });
 
@@ -668,5 +681,28 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hide history initially
   document.querySelector('.history').style.display = 'none';
 
-  newQuestion();
+  // Start Game Handler
+  const startOverlay = document.getElementById('start-overlay');
+  const btnStart = document.getElementById('btn-start-game');
+
+  if (btnStart) {
+    btnStart.addEventListener('click', () => {
+      // Resume audio context
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      // Hide overlay
+      startOverlay.classList.add('hidden');
+
+      // Start timer
+      startTimer();
+
+      // Auto-focus input
+      if (answerEl) answerEl.focus();
+    });
+  }
+
+  // Load first question but DO NOT start timer yet
+  newQuestion(false);
 });
