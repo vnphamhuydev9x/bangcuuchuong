@@ -240,7 +240,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     awaitingNext = true;
     if (submitBtn) submitBtn.textContent = 'Câu Khác';
-    if (answerEl) answerEl.blur();
+    // Use readOnly instead of disabled to keep focus for Enter key
+    if (answerEl) {
+      answerEl.readOnly = true;
+      answerEl.classList.add('input-readonly');
+    }
   }
 
   initTimer();
@@ -499,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show answer in input
     if (answerEl) {
       answerEl.value = correctValue;
-      answerEl.disabled = true;
+      answerEl.readOnly = true; // Allow Enter key
       answerEl.classList.add('revealed');
     }
 
@@ -544,7 +548,10 @@ document.addEventListener('DOMContentLoaded', () => {
       addHistory(`${current.a} ${current.op} ${current.b}`, current.result, true); // Log full equation
       awaitingNext = true;
       submitBtn.textContent = t('btn_next');
-      if (answerEl) answerEl.disabled = true; // Disable input on correct too just to be clean
+      if (answerEl) {
+        answerEl.readOnly = true; // Allow Enter key
+        answerEl.classList.add('input-readonly');
+      }
     } else {
       // Wrong answer logic:
       // 1. Play sound & Message

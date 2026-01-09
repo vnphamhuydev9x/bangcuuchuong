@@ -142,6 +142,25 @@ input[type=number]:focus {
     letter-spacing: 1px;
 }
 
+/* Readonly Input Style (looks disabled but allows focus) */
+input[type=number]:read-only,
+.input-readonly {
+    background-color: #f3f4f6;
+    color: var(--text-muted);
+    cursor: default;
+    border-color: #e5e7eb;
+    box-shadow: none;
+}
+
+/* Revealed Answer Style (Overrides Readonly) */
+input[type=number].revealed {
+    background-color: #fffbeb;
+    color: #b45309;
+    border-color: #f59e0b;
+    font-weight: bold;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
 .submit-btn:hover {
     background: #4338ca;
     transform: translateY(-2px);
@@ -153,14 +172,7 @@ input[type=number]:focus {
     box-shadow: 0 0 0 #005f85, inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Revealed Answer Style */
-input[type=number].revealed {
-    background-color: #fffbeb;
-    color: #b45309;
-    border-color: #f59e0b;
-    font-weight: bold;
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-}
+
 
 .status {
     min-height: 60px;
